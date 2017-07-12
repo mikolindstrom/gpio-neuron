@@ -1,4 +1,4 @@
-# neuron_name
+# Gpio
 Gpio neuron for kalliope
 ## Synopsis
 
@@ -20,7 +20,7 @@ kalliope install --git-url https://github.com/corus87/gpio-neuron
 
 
 ## Synapses example
-
+```
   - name: "temp-out-wohn"
     signals:
       - order: "what are the temperaturs"
@@ -51,11 +51,10 @@ kalliope install --git-url https://github.com/corus87/gpio-neuron
     neurons:
       - gpio:
           set_pin_low: 17
-
+```
 ## Notes
-
-> **Note:** 
-
 To get the sensor ID of each sensor use:
-    cat /sys/devices/w1_bus_master1/w1_master_slaves
+> cat /sys/devices/w1_bus_master1/w1_master_slaves
+
+
 

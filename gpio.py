@@ -54,27 +54,34 @@ class Gpio(NeuronModule):
                         logger.debug('[GPIO] Sensor %s returns %s° celsius' % (self.sensor, '%.1f' % float(temp_celsius)))
                         return temp_celsius		
                
-                message = {"sensor": str('%.1f' % float(callsensor())).rstrip('0').rstrip('.')}
+                message = {"sensor": str('%.0f' % float(callsensor())).rstrip('0').rstrip('.')}
                 self.say(message)
 
     def _is_parameters_ok(self):
         """
         Check if received parameters are ok to perform operations in the neuron
         :return: true if parameters are ok, raise an exception otherwise
-        .. raises:: InvalidParameterException
+        .. raises:: InvalidParameterException, MissingParameterException
         """
-        if self.set_pin_low:
-            try:
-                self.set_pin_low = int(self.set_pin_low)    
-            except ValueError:
-                raise InvalidParameterException("[Gpio] %s is not a valid integer" % self.set_pin_low)
-                
-        if self.set_pin_high:
-            try:
-                self.set_pin_high = int(self.set_pin_high)    
-            except ValueError:
-                raise InvalidParameterException("[Gpio] %s is not a valid integer" % self.set_pin_high)
+
+        def check_for_integer(parameter):
+            if isinstance(parameter, list):     
+                for item in parameter:   
+                    if isinstance(item, (int)):
+                        continue
+                    else:
+                        raise InvalidParameterException("[Gpio] %s List contains not valid integers" % parameter)       
+            else:
+                try:
+                    parameter = int(parameter)
+                except ValueError:   
+                    raise InvalidParameterException("[Gpio] %s is not a valid integer" % parameter)
         
+        if self.set_pin_high:
+            check_for_integer(self.set_pin_high)
+        if self.set_pin_low:
+            check_for_integer(self.set_pin_low)
+            
         if self.fahrenheit and not self.sensor:
             raise MissingParameterException("You must set a sensor")
         return True

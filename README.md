@@ -23,7 +23,7 @@ kalliope install --git-url https://github.com/corus87/gpio-neuron
 | Name         | Description                | Type   | Sample |
 |--------------|----------------------------|--------|--------|
 | sensor       | Returns the temperature in | string | 24.6   |
-|              | celsius or fahrenheit      |        |        |
+|                celsius or fahrenheit                        |
 
 
 ## Synapses example

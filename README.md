@@ -11,18 +11,19 @@ kalliope install --git-url https://github.com/corus87/gpio-neuron
 
 ## Options
 
-| parameter    | required | choices  | comments          |
-|--------------|----------|----------|-------------------|
-| set_pin_high | no       | integer  | GPIO numbers (BCM)|
-| set_pin_low  | no       | integer  |                   |
-| sensor       | no       | string   | (GPIO_GCLK) GPIO 4|
-| fahrenheit   | no       | boolean  | Default false     |
+| Parameter        | Required | Choice  | Default | Comment                  |
+|------------------|----------|---------|---------|--------------------------|
+| set_pin_high     | no       | integer |         | GPIO numbers (BCM)       |
+| set_pin_low      | no       | integer |         |                          |
+| sensor           | no       | string  |         | (GPIO_GCLK) GPIO 4       |
+| fahrenheit       | no       | boolean | False   | Default is celsius       |
+| one_decimal_place| no       | boolean | False   | Default no decimal place |
 
 ## Return values
 
 | Name         | Description                                      | Type   | Sample |
 |--------------|--------------------------------------------------|--------|--------|
-| sensor       | Returns the temperature in celsius or fahrenheit | string | 24.6   |
+| sensor       | Returns the temperature in celsius or fahrenheit | string | 24     |
 
 
 ## Synapses example

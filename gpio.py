@@ -14,6 +14,7 @@ class Gpio(NeuronModule):
         self.set_pin_low = kwargs.get('set_pin_low', None)       
         self.sensor = kwargs.get('sensor', None)
         self.fahrenheit = kwargs.get('fahrenheit', False)
+        self.one_decimal_place = kwargs.get('one_decimal_place', False)
         self.GPIO = GPIO
 
         # check if parameters have been provided
@@ -35,11 +36,8 @@ class Gpio(NeuronModule):
                 
             # 1-Wire 
             if self.sensor:
-                sensorpath = "/sys/bus/w1/devices/"			  
-                sensorfile = "/w1_slave"				                          
-                
                 def callsensor():
-                    with open(sensorpath + self.sensor + sensorfile, 'r') as f:	  
+                    with open("/sys/bus/w1/devices/" + self.sensor + "/w1_slave", 'r') as f:	  
                         lines = f.read().splitlines()	
                         
                     temp_line = lines[1].find('t=')	
@@ -53,8 +51,12 @@ class Gpio(NeuronModule):
                     else:
                         logger.debug('[GPIO] Sensor %s returns %s° celsius' % (self.sensor, '%.1f' % float(temp_celsius)))
                         return temp_celsius		
-               
-                message = {"sensor": str('%.0f' % float(callsensor())).rstrip('0').rstrip('.')}
+                
+                if self.one_decimal_place:
+                    message = {"sensor": str('%.1f' % float(callsensor())).rstrip('0').rstrip('.')}
+                else:
+                    message = {"sensor": str('%.0f' % float(callsensor())).rstrip('0').rstrip('.')}
+                
                 self.say(message)
 
     def _is_parameters_ok(self):
@@ -76,12 +78,26 @@ class Gpio(NeuronModule):
                     parameter = int(parameter)
                 except ValueError:   
                     raise InvalidParameterException("[Gpio] %s is not a valid integer" % parameter)
-        
+
         if self.set_pin_high:
             check_for_integer(self.set_pin_high)
-        if self.set_pin_low:
-            check_for_integer(self.set_pin_low)
             
-        if self.fahrenheit and not self.sensor:
-            raise MissingParameterException("You must set a sensor")
+        elif self.set_pin_low:
+            check_for_integer(self.set_pin_low)
+
+        elif self.sensor:
+            try:
+                with open("/sys/bus/w1/devices/" + self.sensor + "/w1_slave", 'r') as f:   
+                    lines = f.read().splitlines()   
+            except IOError:
+                raise MissingParameterException("[Gpio] Sensor %s not found" % self.sensor)
+
+        elif self.fahrenheit and not self.sensor:
+            raise MissingParameterException("[Gpio] You must set a sensor")
+        
+        elif self.one_decimal_place and not self.sensor:
+            raise MissingParameterException("[Gpio] You must set a sensor")
+        
+        else:
+            raise MissingParameterException("[Gpio] You musst set at least one GPIO pin or sensor")
         return True

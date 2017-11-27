@@ -11,17 +11,24 @@ kalliope install --git-url https://github.com/corus87/gpio-neuron
 
 ## Options
 
+| parameter    | required | choices  | comments          |
+|--------------|----------|----------|-------------------|
+| set_pin_high | no       | integer  | GPIO numbers (BCM)|
+| set_pin_low  | no       | integer  |                   |
+| sensor       | no       | string   | (GPIO_GCLK) GPIO 4|
+| fahrenheit   | no       | boolean  | Default false     |
 
-| parameter    | required | choices | comments          |
-|--------------|----------|---------|-------------------|
-| set_pin_high | no       |integer  | GPIO numbers (BCM)|
-| set_pin_low  | no       |integer  |                   |
-| sensor       | no       |string   | (GPIO_GCLK) GPIO 4|
+## Return values
+
+| Name         | Description                | Type   | Sample |
+|--------------|----------------------------|--------|--------|
+| sensor       | Returns the temperature in | string | 24.6   |
+|              | celsius or fahrenheit      |        |        |
 
 
 ## Synapses example
 ```
-  - name: "temp-out-wohn"
+  - name: "temp-out-living"
     signals:
       - order: "what are the temperaturs"
     neurons:
@@ -30,7 +37,7 @@ kalliope install --git-url https://github.com/corus87/gpio-neuron
           say_template:
               - "outside {{ sensor }} degree,"   
       - gpio:        
-          sensor: "28-0316b3bd7bff" 
+          sensor: "28-0316b3bd7bff"
           say_template:
               - "and in the living room {{ sensor }} degree."  
   

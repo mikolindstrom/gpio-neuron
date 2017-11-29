@@ -55,7 +55,7 @@ class Gpio(NeuronModule):
                 if self.one_decimal_place:
                     message = {"sensor": str('%.1f' % float(callsensor())).rstrip('0').rstrip('.')}
                 else:
-                    message = {"sensor": str('%.0f' % float(callsensor())).rstrip('0').rstrip('.')}
+                    message = {"sensor": str(round(callsensor())).rstrip('0').rstrip('.')}
                 
                 self.say(message)
 

@@ -8,4 +8,4 @@
     - name: "Install pip dependencies"
       pip:
         name: RPi.GPIO
-        version: 0.6.3  
+        version: 0.7.0  

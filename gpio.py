@@ -8,7 +8,7 @@ logger = logging.getLogger("kalliope")
 
 class Gpio(NeuronModule):
     def __init__(self, **kwargs):
-        super(Gpio, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         # the args from the neuron configuration
         self.set_pin_high = kwargs.get('set_pin_high', None)
         self.set_pin_low = kwargs.get('set_pin_low', None)       
@@ -19,7 +19,6 @@ class Gpio(NeuronModule):
 
         # check if parameters have been provided
         if self._is_parameters_ok():
-
             # set gpio pins to high or low 
             self.GPIO.setwarnings(False)
             self.GPIO.setmode(GPIO.BCM)
@@ -41,7 +40,7 @@ class Gpio(NeuronModule):
                         lines = f.read().splitlines()	
                         
                     temp_line = lines[1].find('t=')	
-                    temp_output = lines[1].strip() [temp_line+2:] 
+                    temp_output = lines[1].strip()[temp_line+2:] 
                     temp_celsius = float(temp_output) / 1000
                     
                     if self.fahrenheit:
